@@ -1,0 +1,35 @@
+#!/usr/bin/env python3
+# coding=utf8
+
+'''
+  Copyright (C) 2020, by {{name}} ({{nickname}})
+  Filename : {{filename}}
+  Date     : {{datetime}}
+  Email    : {{email}}
+'''
+
+from pwn import *
+
+''' --- environment --- '''
+# context(log_level = 'debug')
+context(os = 'linux', arch = 'i386', endian = 'little', bits = 32)
+
+''' --- local debug --- '''
+# context(terminal = ['tmux', 'new-window'])
+# p = gdb.debug('./xxx', 'b main')
+# p = process('./xxx')
+
+''' --- remote --- '''
+# s = ssh(host = 'xxx', user = 'xxx', port = 22, password = 'xxx')
+# p = s.process('./xxx', cwd = 'xxx')
+# p = remote(host = 'xxx', port = 8888)
+
+''' --- variables --- '''
+
+''' --- coding here --- '''
+
+
+
+
+''' --- interactive --- '''
+p.interactive()

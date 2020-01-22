@@ -1,0 +1,36 @@
+/**
+ * Copyright (C) 2020, by {{name}} ({{nickname}})
+ *
+ * Filename : {{filename}}
+ * Date     : {{datetime}}
+ * Email    : {{email}}
+ */
+
+#include <bits/stdc++.h>
+using namespace std;
+
+
+typedef long long ll;
+
+#define sz(v) (int)(v).size()
+#define all(v) (v).begin(),(v).end()
+
+#define x first
+#define y second
+#define pb push_back
+
+void _init() {
+  ios::sync_with_stdio(false);
+  cin.tie(0);
+  cout.tie(0);
+
+  cout << setprecision(10);
+  cout << fixed;
+}
+
+int main () {
+  _init();
+
+  return 0;
+}
+

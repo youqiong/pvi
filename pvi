@@ -1,0 +1,95 @@
+#!/usr/bin/env python3
+# coding=utf8
+
+'''
+  Copyright (C) 2020, by Zhan Shi (youqiong)
+  Filename : a.py
+  Date     : 2020-01-22 14:39:48
+  Email    : youqinogsz@gmail.com
+'''
+
+import os
+import sys
+import datetime
+import argparse
+import subprocess
+
+sys.path.append(os.path.join(os.path.dirname(sys.argv[0]), 'pvi_content'))
+from config import default_config, default_template, special_type
+
+class PythonViLauncher:
+    def __init__(self, d):
+        self.script_path_dir = os.path.dirname(sys.argv[0])
+        self.filename = d["filename"]
+        self.suffix = self.filename.split(".")[-1]
+        self.type = "" if "type" not in d.keys() else d["type"]
+
+    def initFile(self):
+        if os.path.exists(self.filename):
+            return
+
+        if not os.path.exists(os.path.dirname(self.filename)):
+            try:
+                os.makedirs(os.path.dirname(self.filename))
+            except:
+                pass
+        newfileDescriptor = open(self.filename, "w")
+
+        content_filename = ""
+        if self.type:
+            content_filename = self.special_type_content()
+        else:
+            content_filename = self.default_content()
+
+        if content_filename:
+            with open(content_filename, "r") as f:
+                lines = f.readlines()
+                t = []
+                for line in lines:
+                    new_line = line
+                    new_line = new_line.replace("{{filename}}", self.filename)
+                    new_line = new_line.replace("{{datetime}}", str(datetime.datetime.now()).split('.')[0])
+                    new_line = new_line.replace("{{name}}", default_config['name'])
+                    new_line = new_line.replace("{{nickname}}", default_config['nickname'])
+                    new_line = new_line.replace("{{email}}", default_config['email'])
+                    t.append(new_line)
+                lines = t
+                newfileDescriptor.writelines(lines)
+
+        newfileDescriptor.close()
+
+    def special_type_content(self):
+        f = None
+        for k in special_type.keys():
+            if self.type == k:
+                f = os.path.join(self.script_path_dir, "pvi_content", special_type[k])
+        return f
+
+    def default_content(self):
+        f = ""
+        for k in default_template.keys():
+            if self.suffix == k:
+                f = os.path.join(self.script_path_dir, "pvi_content", default_template[k])
+        return f
+
+    def launchar_vi(self):
+        subprocess.call(['/usr/bin/vi', f'{self.filename}'])
+
+def parse():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("file", help="the file name to edit (auto create if no exists)")
+    parser.add_argument("-t", "--type", help="specify special type of the file")
+    args = parser.parse_args()
+
+    d = {}
+    d["filename"] = args.file
+    if args.type:
+        d["type"] = args.type
+
+    return d
+
+if __name__ == "__main__":
+    dict_para = parse()
+    pvi = PythonViLauncher(dict_para)
+    pvi.initFile()
+    pvi.launchar_vi()

@@ -1,0 +1,16 @@
+/**
+ * Copyright (C) 2020, by {{name}} ({{nickname}})
+ *
+ * Filename : {{filename}}
+ * Date     : {{datetime}}
+ * Email    : {{email}}
+ */
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int main () {
+
+  return 0;
+}
+
