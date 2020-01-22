@@ -29,10 +29,8 @@ class PythonViLauncher:
             return
 
         if not os.path.exists(os.path.dirname(self.filename)):
-            try:
-                os.makedirs(os.path.dirname(self.filename))
-            except:
-                pass
+            os.makedirs(os.path.dirname(self.filename))
+
         newfileDescriptor = open(self.filename, "w")
 
         content_filename = ""
@@ -47,7 +45,7 @@ class PythonViLauncher:
                 t = []
                 for line in lines:
                     new_line = line
-                    new_line = new_line.replace("{{filename}}", self.filename)
+                    new_line = new_line.replace("{{filename}}", self.filename.split("/")[-1])
                     new_line = new_line.replace("{{datetime}}", str(datetime.datetime.now()).split('.')[0])
                     new_line = new_line.replace("{{name}}", default_config['name'])
                     new_line = new_line.replace("{{nickname}}", default_config['nickname'])
