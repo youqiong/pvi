@@ -24,7 +24,7 @@ class PythonViLauncher:
         self.suffix = self.filename.split(".")[-1]
         self.type = "" if "type" not in d.keys() else d["type"]
 
-    def initFile(self):
+    def init_file(self):
         if os.path.exists(self.filename):
             return
 
@@ -91,5 +91,5 @@ def parse():
 if __name__ == "__main__":
     dict_para = parse()
     pvi = PythonViLauncher(dict_para)
-    pvi.initFile()
+    pvi.init_file()
     pvi.launchar_vi()
