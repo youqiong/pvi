@@ -73,7 +73,7 @@ class PythonViLauncher:
                 f = os.path.join(self.script_path_dir, "pvi_content", default_template[k])
         return f
 
-    def launchar_vi(self):
+    def launcher_vi(self):
         subprocess.call(['/usr/bin/vi', f'{self.filename}'])
 
 def parse():
@@ -93,4 +93,4 @@ if __name__ == "__main__":
     dict_para = parse()
     pvi = PythonViLauncher(dict_para)
     pvi.init_file()
-    pvi.launchar_vi()
+    pvi.launcher_vi()
