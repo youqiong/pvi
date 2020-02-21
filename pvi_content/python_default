@@ -2,7 +2,7 @@
 # coding=utf8
 
 '''
-  Copyright (C) 2020, by {{name}} ({{nickname}})
+  Copyright (C) {{year}}, by {{name}} ({{nickname}})
   Filename : {{filename}}
   Date     : {{datetime}}
   Email    : {{email}}
