@@ -19,6 +19,7 @@ default_template = {
         "py" : "python_default",
         "sh" : "shell_default",
         "html" : "html_default",
+        "go" : "go_default",
 }
 
 special_type = {
