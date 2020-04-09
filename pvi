@@ -75,7 +75,8 @@ class PythonViLauncher:
         return f
 
     def launcher_vi(self):
-        subprocess.call(['/usr/bin/vi', f'{self.filename}'])
+        # subprocess.call(['/usr/bin/vi', f'{self.filename}'])
+        subprocess.call(['/usr/bin/vi', '{0}'.format(self.filename)])
 
 def parse():
     parser = argparse.ArgumentParser()
