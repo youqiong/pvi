@@ -20,6 +20,7 @@ default_template = {
         "sh" : "shell_default",
         "html" : "html_default",
         "go" : "go_default",
+        "sql" : "sql_defalut",
 }
 
 special_type = {
