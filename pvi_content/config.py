@@ -15,6 +15,7 @@ default_config = {
 }
 
 default_template = {
+        "c" : "c_default",
         "cpp" : "cplusplus_default",
         "py" : "python_default",
         "sh" : "shell_default",
