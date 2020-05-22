@@ -26,6 +26,8 @@ context(os = 'linux', arch = 'i386', endian = 'little', bits = 32)
 
 ''' --- variables --- '''
 
+''' --- functions --- '''
+
 ''' --- coding here --- '''
 
 
