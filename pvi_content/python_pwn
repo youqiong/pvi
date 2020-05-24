@@ -30,8 +30,5 @@ context(os = 'linux', arch = 'i386', endian = 'little', bits = 32)
 
 ''' --- coding here --- '''
 
-
-
-
 ''' --- interactive --- '''
 p.interactive()
