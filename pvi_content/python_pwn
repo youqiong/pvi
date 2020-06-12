@@ -13,21 +13,29 @@ from pwn import *
 ''' --- environment --- '''
 # context(log_level = 'debug')
 context(os = 'linux', arch = 'i386', endian = 'little', bits = 32)
-
-''' --- local debug --- '''
-# context(terminal = ['tmux', 'new-window'])
-# p = gdb.debug('./xxx', 'b main')
-# p = process('./xxx')
-
-''' --- remote --- '''
-# s = ssh(host = 'xxx', user = 'xxx', port = 22, password = 'xxx')
-# p = s.process('./xxx', cwd = 'xxx')
-# p = remote(host = 'xxx', port = 8888)
+# context(os = 'linux', arch = 'amd64', endian = 'little', bits = 64)
 
 ''' --- variables --- '''
+LOCAL = 1
+REMOTE = 2
 
 ''' --- functions --- '''
-def generate_format_string_payload(where_what_map_list, begin_offset, string_format_offset_pair):
+def get_process(target, *args):
+    # ''' --- local debug --- '''
+    if target == LOCAL:
+        pass
+        # context(terminal = ['tmux', 'new-window'])
+        # p = gdb.debug(list(args), 'b main')
+        # p = process(list(args))
+    # ''' --- remote --- '''
+    elif target == REMOTE:
+        pass
+        # s = ssh(host = 'xxx', user = 'xxx', port = 22, password = 'xxx')
+        # p = s.process(list(args), cwd = 'xxx')
+        # p = remote(host = 'xxx', port = 8888)
+    return p
+
+def generate_format_string_payload(where_what_map, begin_offset, string_format_offset_pair):
     def min_string_format_offset_pair(offset, index):
         return offset - 4 * max(1, index - 1), 1
 
@@ -44,14 +52,12 @@ def generate_format_string_payload(where_what_map_list, begin_offset, string_for
     string_format_offset_pair = min_string_format_offset_pair(*string_format_offset_pair)
     offset, index = get_real_begin_offset_and_index(begin_offset, *string_format_offset_pair)
 
-    log.info("offset: {}".format(offset))
-
     payload = b'A' * offset
-    for where in where_what_map_list.keys():
+    for where in where_what_map.keys():
         payload += p32(where) + p32(where + 2)
 
-    offset += len(where_what_map_list) * 8
-    for where, what in where_what_map_list.items():
+    offset += len(where_what_map) * 8
+    for where, what in where_what_map.items():
         v1 = (what & 0xffff) - offset
         if v1 < 0:
             v1 += 0x10000
@@ -68,6 +74,8 @@ def generate_format_string_payload(where_what_map_list, begin_offset, string_for
     return payload[begin_offset:]
 
 ''' --- coding here --- '''
+# p = get_process(LOCAL)
+# p = get_process(REMOTE)
 
 ''' --- interactive --- '''
-p.interactive()
+# p.interactive()
