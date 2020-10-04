@@ -9,6 +9,7 @@
 '''
 
 from pwn import *
+from LibcSearcher import *
 
 ''' --- environment --- '''
 # context(log_level = 'debug')
@@ -23,17 +24,22 @@ REMOTE = 2
 def get_process(target, *args):
     # ''' --- local debug --- '''
     if target == LOCAL:
-        pass
         # context(terminal = ['tmux', 'new-window'])
         # p = gdb.debug(list(args), 'b main')
-        # p = process(list(args))
+        p = process(list(args))
     # ''' --- remote --- '''
     elif target == REMOTE:
-        pass
         # s = ssh(host = 'xxx', user = 'xxx', port = 22, password = 'xxx')
         # p = s.process(list(args), cwd = 'xxx')
-        # p = remote(host = 'xxx', port = 8888)
+        p = remote(host = 'xxx', port = 8888)
     return p
+
+def get_real_address(leaked_name, leaked_address, wanted_list):
+    libc_searcher = LibcSearcher(leaked_name, leaked_address)
+    wanted_address = []
+    for wanted in wanted_list:
+        wanted_address.append(libc_searcher.dump(wanted) + (leaked_address - libc_searcher.dump(leaked_name)))
+    return wanted_address
 
 def generate_format_string_payload(where_what_map, begin_offset, string_format_offset_pair):
     def min_string_format_offset_pair(offset, index):
@@ -74,8 +80,8 @@ def generate_format_string_payload(where_what_map, begin_offset, string_format_o
     return payload[begin_offset:]
 
 ''' --- coding here --- '''
-# p = get_process(LOCAL)
+p = get_process(LOCAL)
 # p = get_process(REMOTE)
 
 ''' --- interactive --- '''
-# p.interactive()
+p.interactive()
