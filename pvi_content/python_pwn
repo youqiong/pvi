@@ -10,6 +10,7 @@
 
 from pwn import *
 from LibcSearcher import *
+import subprocess
 
 ''' --- environment --- '''
 # context(log_level = 'debug')
@@ -33,6 +34,9 @@ def get_process(target, *args):
         # p = s.process(list(args), cwd = 'xxx')
         p = remote(host = 'xxx', port = 8888)
     return p
+
+def get_one_gadget_list(filename):
+    return [int(x) for x in subprocess.check_output(['one_gadget', '--raw', filename]).decode().split(' ')]
 
 def get_real_address(leaked_name, leaked_address, wanted_list):
     libc_searcher = LibcSearcher(leaked_name, leaked_address)
