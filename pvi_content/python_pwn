@@ -9,8 +9,10 @@
 '''
 
 from pwn import *
+import struct
 from LibcSearcher import *
 import subprocess
+
 
 ''' --- environment --- '''
 # context(log_level = 'debug')
@@ -27,6 +29,7 @@ def get_process(target, *args):
     if target == LOCAL:
         # context(terminal = ['tmux', 'new-window'])
         # p = gdb.debug(list(args), 'b main')
+        # p = process(list(args), env = {'LD_PRELOAD' : './libc-2.27.so'}
         p = process(list(args))
     # ''' --- remote --- '''
     elif target == REMOTE:
@@ -35,9 +38,11 @@ def get_process(target, *args):
         p = remote(host = 'xxx', port = 8888)
     return p
 
+# get_one_gadget_list('/usr/lib/x86_64-linux-gnu/libc-2.31.so')[1]
 def get_one_gadget_list(filename):
     return [int(x) for x in subprocess.check_output(['one_gadget', '--raw', filename]).decode().split(' ')]
 
+# LibcSearcher
 def get_real_address(leaked_name, leaked_address, wanted_list):
     libc_searcher = LibcSearcher(leaked_name, leaked_address)
     wanted_address = []
@@ -45,6 +50,7 @@ def get_real_address(leaked_name, leaked_address, wanted_list):
         wanted_address.append(libc_searcher.dump(wanted) + (leaked_address - libc_searcher.dump(leaked_name)))
     return wanted_address
 
+# format string
 def generate_format_string_payload(where_what_map, begin_offset, string_format_offset_pair):
     def min_string_format_offset_pair(offset, index):
         return offset - 4 * max(1, index - 1), 1
