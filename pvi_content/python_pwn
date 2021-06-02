@@ -51,6 +51,9 @@ def get_real_address(leaked_name, leaked_address, wanted_list):
     return wanted_address
 
 # format string
+# string_format_offset_pair
+    # [offset_of_whole_fmt, stack_index]
+    # 'xxxxAAAA-%10$x' -> 'xxxxAAAA-41414141' -> [4, 10]
 def generate_format_string_payload(where_what_map, begin_offset, string_format_offset_pair):
     def min_string_format_offset_pair(offset, index):
         return offset - 4 * max(1, index - 1), 1
